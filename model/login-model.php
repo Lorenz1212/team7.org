@@ -108,7 +108,6 @@ Class Model{
 			$arr = explode(".",$admin['ipadd_prev']);
 			unset($arr[3]);
 			$ip_address_prev = implode(".",$arr);
-			if($ip_address_prev == $ip_address || $admin['ipadd_prev'] === null){
 				$this->crud->execute("UPDATE tbl_administrator SET ipadd_prev='$ip_address_main' WHERE email='$email'");
 			// once na gagawa kayo ng $toke para hindi malaman ni hacker kung ano pinasok mo data kailangan gagamit tayo md5
 			// md5 is ramdom string example. the value is budoy pero once na nakamd5 ang lalabas na result : dasdkj43434dsjadaskdljda-3xfdas
@@ -142,12 +141,7 @@ Class Model{
 			       return 'Opsss, Something went wrong, Please try again later.';
 			    }
 			}
-			else{
-				$pin = random_int(100000, 999999);
-				// Para maupdate nya yung data sa loob ng database.
-				$this->crud->execute("UPDATE tbl_administrator SET ipadd_pin='$pin', expiry= DATE_ADD(NOW(), INTERVAL 10 MINUTE) WHERE email='$email'");
-				return 'ip_check';
-			}
+
 		}
 	}
 }
