@@ -17,7 +17,7 @@ if(!isset($_COOKIE[$config->cookie_user()])){
     if(substr($url, -1) != '/') $url=$url.'/';
 
     $subdir = str_replace('/', '', $config->get_string_between($url, $config->Domain("domain"), '/'));
-    $new_url=str_replace('/'.$config->Live_Domain(),'',$_SERVER['REQUEST_URI']);
+    $new_url=str_replace('/'.$config->base_url(),'',$_SERVER['REQUEST_URI']);
     $dir='';
     for($i=0;$i<substr_count($new_url, "/")-2;$i++){
         $dir.='../';
