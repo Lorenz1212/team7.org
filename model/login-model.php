@@ -140,7 +140,7 @@ Class Model{
 			    }else{
 			       return 'Opsss, Something went wrong, Please try again later.';
 			    }
-			}
+			
 
 		}
 	}
