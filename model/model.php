@@ -58,8 +58,11 @@ Class Model {
 		  			if($wallet < $val1){
 		  				return 'Your wallet is not enough balance';
 		  			}else{
-		  				$randomnumber = rand(10,99);
-		  				if ($randomnumber % 2 == 0) {
+		  				$sql = "SELECT * FROM tbl_random_number WHERE id=1";
+		  				$result_number = $this->crud->fetchSingleRow($sql);
+		  			
+		  				$randomnumber = $result_number['ran_number'];
+		  				if ($result_number % 2 == 0) {
 							  $number_status = 'EVEN';
 							}else{
 								$number_status = 'ODD';
@@ -77,7 +80,13 @@ Class Model {
 								$sql = "UPDATE tbl_administrator SET wallet='$total' WHERE id='$admin_id'";
 								$result_update = $this->crud->update($sql);
 								if($result_update){
-									return array('status'=>$status,'result_number'=>$randomnumber,'result_status'=>$number_status);
+									$randomupdate = rand(10,99);
+									$sql = "UPDATE tbl_random_number SET ran_number='$randomupdate' WHERE id=1";
+									if($this->crud->update($sql)){
+										return array('status'=>$status,'result_number'=>$randomnumber,'result_status'=>$number_status);
+									}else{
+										return false;
+									}
 								}
 							}else{
 								return false;

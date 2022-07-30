@@ -7,8 +7,7 @@ Class Config {
 		$base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 		return $base_url;
 	}
-
-//SESSION
+	//SESSION
 	public function SESS(){
 		return $value = "team7";
 	}
@@ -68,8 +67,6 @@ Class Config {
 	    $len = strpos($string, $end, $ini) - $ini;
 	    return substr($string, $ini, $len);
 	}
-
-
 	private function isHttps(){
 	    if (array_key_exists("HTTPS", $_SERVER) && 'on' === $_SERVER["HTTPS"]) {
 	        return true;

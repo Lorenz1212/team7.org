@@ -10,9 +10,6 @@ thead tr th {
   position: sticky;
   top: 0;
 }
-
-
-
 /* Because we must set sticky on th,
  we have to apply background styles here
  rather than on thead */
