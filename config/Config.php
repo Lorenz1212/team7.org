@@ -37,7 +37,7 @@ Class Config {
 
 //DOMAIN
 	public function Live_Domain(){
-	    return "team7.org";
+	    return "miracle-tree.org/team7.org";
 	}
 	public function Link(){
 	    if ($this->isHttps()) {
