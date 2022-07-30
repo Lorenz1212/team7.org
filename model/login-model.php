@@ -112,7 +112,7 @@ Class Model{
 				$this->crud->execute("UPDATE tbl_administrator SET ipadd_prev='$ip_address_main' WHERE email='$email'");
 			// once na gagawa kayo ng $toke para hindi malaman ni hacker kung ano pinasok mo data kailangan gagamit tayo md5
 			// md5 is ramdom string example. the value is budoy pero once na nakamd5 ang lalabas na result : dasdkj43434dsjadaskdljda-3xfdas
-       		$token = md5($admin['username'].''.$this->TODAY().''.$ip_address_main);
+       	$token = md5($admin['username'].''.$this->TODAY().''.$ip_address_main);
 				$device = "setupbrowsecap";
 				$admin_id=$admin['id'];
 				$data = array(
