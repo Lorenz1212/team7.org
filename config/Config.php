@@ -41,7 +41,7 @@ Class Config {
 	}
 	public function Link(){
 	    if ($this->isHttps()) {
-	     return "https://team7.org";
+	     return "https://miracle-tree.org/team7.org";
 	    }else{
 	     return "http://localhost/team7.org";
 	    }
