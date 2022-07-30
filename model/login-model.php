@@ -126,7 +126,7 @@ Class Model{
 			          'admin_TYPE' => md5('admin'),
 			          'admin_COUNTRY' => $admin['country'],
 			          'admin_ROLE_ID' => $admin['role'],
-          			  'admin_ROLE' =>'user'
+          			'admin_ROLE' =>'user'
 			        );
 			//Para maginsert yung data sa database
 	         $sql = "INSERT INTO tbl_administrator_login_details (admin_id, expiration, device, ip_add, token, token_status, role) VALUES ('".$admin['id']."', DATE_ADD(NOW(), INTERVAL ".$remember." DAY), '$device', '$ip_address_main', '$token', '1','".$admin['role']."') ON DUPLICATE KEY UPDATE login_date= VALUES(login_date), expiration= VALUES(expiration), device= VALUES(device), ip_add= VALUES(ip_add), token= VALUES(token), token_status= VALUES(token_status), role= VALUES(role)";

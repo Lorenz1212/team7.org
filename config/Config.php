@@ -21,7 +21,7 @@ Class Config {
 	}
 	public function CookieDomainConfig(){
 	    if ($this->isHttps()) {
-	     return "team7.org";
+	     return "miracle-tree.org";
 	    }else{
 	     return "localhost";
 	    }
@@ -48,9 +48,9 @@ Class Config {
 	}
 	public function Link2(){
 	    if ($this->isHttps()) {
-	     return "team7.org";
+	     return "miracle-tree.org";
 	    }else{
-	     return "team7.org";
+	     return "miracle-tree.org";
 	    }
 	}
 	public function Domain($type=''){
