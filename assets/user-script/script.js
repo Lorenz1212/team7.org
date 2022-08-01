@@ -192,6 +192,12 @@ var APPHANDLER = function(){
           switch(String(view)){
               case 'dashboard':{
                 _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'result_list']));
+                _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'result_player']));
+                // Para magrefresh yung table every 4 second to update the data.
+                setInterval(function() {
+                  _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'result_player']));
+                }, 4000);
+                // Para submit mo yung bet mo.
                 $('.val-status').on('click',function(e){
                   e.preventDefault();
                   let val = $(this).attr('data-status');
@@ -207,6 +213,22 @@ var APPHANDLER = function(){
                     _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'submit_bet',val,amount]));
                   }
                 })
+
+                //para magcount yung timer at magshow yung pinakaresult
+                var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+                var x = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+                var seconds = Math.floor((distance % (995 * 30)) / 1000);
+                $('.timer').text(seconds);
+                  if(seconds == 0){
+                     _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'submit_result']));
+                  }
+                 if (distance == 0) {
+                    clearInterval(x);
+                    $('.timer').text(seconds);
+                  }
+                }, 1000);
                 break;
               }
             
@@ -237,29 +259,57 @@ var APPHANDLER = function(){
 
     var _construct = async function(response, type, element, object){
          switch(type){
-              case "result_list":{
-                let container = $('#table_result > tbody');
-                container.empty();
+              case "result_player":{
+                // Laman ng Table 1. Nakaloop po yung data para lumabas lahat galing sa database.
+                let container = $('#table_player > tbody');
+                 container.empty();
                 if(response !=false){
-                    $('.wallet-balance').text(response.wallet);
-                    for(let i =0;i<response.result.length;i++){
-                       var status = {
-                        'WIN': {'title': 'Win', 'state': 'success'},
-                        'LOSE': {'title': 'Lose', 'state': 'danger'}
-                      };
-                      let html = $('<tr><td>'+response.result[i].result_number+'</td>\
-                                    <td>'+response.result[i].bet_amount+'</td>\
-                                    <td>'+response.result[i].bet_status+'</td>\
-                                    <td><div class="d-flex flex-row align-items-center"><span class="label label-' + status[response.result[i].status].state + ' label-dot mr-2"></span>' +
-                                      '<span class="font-weight-bold text-' + status[response.result[i].status].state + '">' + status[response.result[i].status].title + '</span></div></td>\
-                                    </tr>');
-                      container.append(html);
+                   for(let i =0;i<response.player.length;i++){
+                      let html1 = $('<tr><td>'+response.player[i].fullname+'</td>\
+                                    <td>'+response.player[i].bet_amount+'</td>\
+                                    <td>'+response.player[i].bet_status+'</td>\
+                                  </tr>');
+                      container.append(html1);
                     }
                 }
                 break;
               }
-              case "submit_bet":{
-                console.log(response)
+              case "result_list":{
+                // Laman ng Table 2. Nakaloop po yung data para lumabas lahat galing sa database.
+                let container = $('#table_result > tbody');
+                container.empty();
+                if(response !=false){
+                    $('.wallet-balance').text(response.wallet);
+                    if(response.result){
+                        for(let i =0;i<response.result.length;i++){
+                         var status = {
+                          'WIN': {'title': 'Win', 'state': 'success'},
+                          'LOSE': {'title': 'Lose', 'state': 'danger'}
+                        };
+                        let html = $('<tr><td>'+response.result[i].result_number+'</td>\
+                                      <td>'+response.result[i].bet_amount+'</td>\
+                                      <td>'+response.result[i].bet_status+'</td>\
+                                      <td><div class="d-flex flex-row align-items-center"><span class="label label-' + status[response.result[i].status].state + ' label-dot mr-2"></span>' +
+                                        '<span class="font-weight-bold text-' + status[response.result[i].status].state + '">' + status[response.result[i].status].title + '</span></div></td>\
+                                      </tr>');
+                        container.append(html);
+                      }
+                    }
+                }
+                break;
+              }
+               case "submit_bet":{
+                  if(response == true){
+                  _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'result_player']));
+                  }else if(response == false){
+                    Swal.fire("Ops!", 'Something went wrong..', "error");
+                  }else{
+                    Swal.fire("Oopps", response, "info");
+                  }
+                $('input[name=amount]').val("");
+                break;
+              }
+              case "submit_result":{
                 if(response != false){
                   if(response.status == 'WIN'){
                     Swal.fire("WIN", 'Congratulation Your Win!', "success");
@@ -269,17 +319,16 @@ var APPHANDLER = function(){
                     Swal.fire("LOSE", 'Oopps Better luck next time!', "error");
                     $('#result-number').text(response.result_number);
                     $('#result-status').text(response.result_status);
-                  }else{
-                    Swal.fire("Oopps", response, "info");
                   }
+                }else if(response == 'none'){
+                  // no response
                 }else{
                   Swal.fire("Ops!", 'Something went wrong..', "error");
                 }
+                _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'result_player']));
                  _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'result_list']));
                 break;
               }
-
-
               default:
               // code block
               break;

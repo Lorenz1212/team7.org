@@ -1,7 +1,7 @@
 <style type="text/css">
 	/* Set a fixed scrollable wrapper */
 .tableWrap {
-  height: 370px;
+  height: 200px;
   border: 2px solid black;
   overflow: auto;
 }
@@ -105,24 +105,43 @@ tbody tr:hover {
 
 						<div class="col-sm-6">
 							<div class="row">
-								<div class="col-12">
+								<div class="col-4">
+									<span class="font-size-h2 text-primary">TIMER : <span class="timer"></span></span>
+								</div>
+								<div class="col-7">
 									<span class="font-size-h2 text-primary">MY WALLET : <span class="wallet-balance"></span></span>
 								</div>
 								<div class="col-12">
 									<div class="tableWrap">
-									<table class="table table-bordered table-checkable dataTable no-footer dtr-inline collapsed" id="table_result">
-										<thead>
-											<tr>
-												<th>Result</th>
-												<th>Bet Amount</th>
-												<th>Bet Status</th>
-												<th>WIN/LOSE</th>
-											</tr>
-										</thead>
-										<tbody></tbody>
-									</table>
+										<table class="table table-bordered table-checkable dataTable no-footer dtr-inline collapsed" id="table_player">
+											<thead>
+												<tr>
+													<th>Player</th>
+													<th>Bet Amount</th>
+													<th>Bet Status</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+										</table>
+									</div>
 								</div>
+								<div class="col-12 mt-5">
+									<div class="tableWrap">
+										<table class="table table-bordered table-checkable dataTable no-footer dtr-inline collapsed" id="table_result">
+											<thead>
+												<tr>
+													<th>Result</th>
+													<th>Bet Amount</th>
+													<th>Bet Status</th>
+													<th>WIN/LOSE</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+										</table>
+									</div>
 								</div>
+
+
 						</div>
 					</div>
 					<!--end::Nav Tabs-->

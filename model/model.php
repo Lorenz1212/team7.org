@@ -30,6 +30,21 @@ Class Model {
 		  $val1 = $this->crud->escape_string($val1);
 		  $admin_id=$this->User_Data('admin_UID');
 		  switch($type){
+		  	case "result_player":{
+		  		 $data_player = array();
+		  		$sql = "SELECT *,(SELECT CONCAT(fname,' ',lname) FROM tbl_administrator WHERE id=tbl_user_bet.user_id) as fullname FROM tbl_user_bet ORDER BY id DESC";
+		  		$result = $this->crud->getData($sql);
+		  		if($result){
+		  			foreach($result as $row){
+		  				$data_player['player'][] = array('fullname'=>$row['fullname'],
+		  												'bet_amount'=>number_format($row['bet_amount'],2),
+		  												'bet_status'=>$row['bet_status']
+		  											);
+		  			}
+		  		}
+		  		return $data_player;
+		  		break;
+		  	}
 		  	case "result_list":{	
 		  	  $data = array();
 		  	  $data_wallet = array();
@@ -46,8 +61,9 @@ Class Model {
 		  												'status'=>$row['status']
 		  											);
 		  			}
-		  			return array_merge_recursive($data,$data_wallet);
+		  			
 		  		}
+		  		return array_merge_recursive($data,$data_wallet);
 		  		break;
 		  	}
 		  	case "submit_bet":{
@@ -58,46 +74,75 @@ Class Model {
 		  			if($wallet < $val1){
 		  				return 'Your wallet is not enough balance';
 		  			}else{
-		  				$sql = "SELECT * FROM tbl_random_number WHERE id=1";
-		  				$result_number = $this->crud->fetchSingleRow($sql);
-		  			
-		  				$randomnumber = $result_number['ran_number'];
-		  				if ($randomnumber % 2 == 0) {
-							  $number_status = 'EVEN';
-							}else{
-								$number_status = 'ODD';
-							}
-							if($val == $number_status){
-								$status = "WIN";
-								$total = $wallet + ($val1*2);
-							}else{
-								$status = "LOSE";
-								$total = $wallet - $val1;
-							}
-							$sql = "INSERT INTO tbl_result(user_id,result_number,result_status,bet_amount,bet_status,status)VALUES('$admin_id','$randomnumber','$number_status','$val1','$val','$status')";
-							$result = $this->crud->execute($sql);
-							if($result){
-								$sql = "UPDATE tbl_administrator SET wallet='$total' WHERE id='$admin_id'";
-								$result_update = $this->crud->update($sql);
-								if($result_update){
-									$randomupdate = rand(10,99);
-									$sql = "UPDATE tbl_random_number SET ran_number='$randomupdate' WHERE id=1";
-									if($this->crud->update($sql)){
-										return array('status'=>$status,'result_number'=>$randomnumber,'result_status'=>$number_status);
-									}else{
-										return false;
-									}
+		  				$sql = "SELECT * FROM tbl_user_bet WHERE user_id='$admin_id'";
+		  				$row = $this->crud->fetchSingleRow($sql);
+		  				if(!$row){
+		  					$sql = "INSERT INTO tbl_user_bet(user_id,bet_amount,bet_status)VALUES('$admin_id','$val1','$val')";
+								$result = $this->crud->execute($sql);
+								if($result){
+									return true;
+								}else{
+									return false;
 								}
-							}else{
-								return false;
-							}
+		  				}else{
+		  					return 'Bets accepted will not be changed or voided upon confirmation of the successfully placed bet. Please wait after the countdown is done';
+		  				}
 		  			}
 		  		}else{
 		  			return false;
 		  		}
 		  		break;
 		  	}
-
+		  	case "submit_result":{
+		  		$sql = "SELECT *,(SELECT wallet FROM tbl_administrator WHERE id=tbl_user_bet.user_id) as wallet FROM tbl_user_bet";
+		  		$query = $this->crud->getData($sql);
+		  		if($query){
+		  			$sql = "SELECT * FROM tbl_random_number WHERE id=1";
+		  			$result_number = $this->crud->fetchSingleRow($sql);
+	  				$randomnumber = $result_number['ran_number'];
+	  				if ($randomnumber % 2 == 0) {
+						  $number_status = 'EVEN';
+						}else{
+							$number_status = 'ODD';
+						}
+		  			foreach($query as $row){
+		  				$wallet = $row['wallet'];
+		  				$user_id = $row['user_id'];
+		  				$bet_amount = $row['bet_amount'];
+		  				$bet_status = $row['bet_status'];
+		  					if($bet_status == $number_status){
+									$status = "WIN";
+									$total = $wallet + ($bet_amount*2);
+								}else{
+									$status = "LOSE";
+									$total = $wallet - $bet_amount;
+								}
+								$sql = "INSERT INTO tbl_result(user_id,result_number,result_status,bet_amount,bet_status,status)VALUES('$user_id','$randomnumber','$number_status','$bet_amount','$bet_status','$status')";
+								$result = $this->crud->execute($sql);
+								if($result){
+									$sql = "UPDATE tbl_administrator SET wallet='$total' WHERE id='$user_id'";
+									$this->crud->update($sql);
+								}
+		  			}
+		  			$updanumber = rand(10,99);
+		  			$sql = "UPDATE tbl_random_number SET ran_number='$updanumber' WHERE id=1";
+		  			if($this->crud->update($sql)){
+		  				$sql = "SELECT * FROM tbl_user_bet WHERE user_id='$admin_id'";
+			  			$row = $this->crud->fetchSingleRow($sql);
+			  			if($row){
+			  				$sql = "DELETE FROM tbl_user_bet";
+			  				if($this->crud->execute($sql)){
+			  					return array('status'=>$status,'result_number'=>$randomnumber,'result_status'=>$number_status);
+			  				}
+			  			}else{
+			  				return 'none';
+			  			}
+		  			}
+		  		}else{
+		  			return 'none';
+		  		}
+		  		break;
+		  	}
 
 		  }
 	}
