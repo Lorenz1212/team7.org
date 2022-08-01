@@ -102,7 +102,6 @@ tbody tr:hover {
 								</div>
 							</div>
 						</div>
-
 						<div class="col-sm-6">
 							<div class="row">
 								<div class="col-4">
@@ -140,14 +139,12 @@ tbody tr:hover {
 										</table>
 									</div>
 								</div>
-
-
+							</div>
 						</div>
 					</div>
-					<!--end::Nav Tabs-->
 				</div>	
+			</div>
 		</div>
 	</div>
-</div>
 
 
