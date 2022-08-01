@@ -62,7 +62,7 @@ Class Model {
 		  				$result_number = $this->crud->fetchSingleRow($sql);
 		  			
 		  				$randomnumber = $result_number['ran_number'];
-		  				if ($result_number % 2 == 0) {
+		  				if ($randomnumber % 2 == 0) {
 							  $number_status = 'EVEN';
 							}else{
 								$number_status = 'ODD';

@@ -25,7 +25,6 @@ Class Config {
 	     return "localhost";
 	    }
 	}
-
 	public function SESS_domain(){
 	    if ($this->isHttps()) {
 	     return "team7-live-";
@@ -40,9 +39,9 @@ Class Config {
 	}
 	public function Link(){
 	    if ($this->isHttps()) {
-	     return "https://miracle-tree.org/team7.org";
+	     return $this->base_url()."/team7.org";
 	    }else{
-	     return "http://localhost/team7.org";
+	     return $this->base_url()."/team7.org";
 	    }
 	}
 	public function Link2(){
