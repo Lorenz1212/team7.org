@@ -219,12 +219,12 @@ var APPHANDLER = function(){
                 var x = setInterval(function() {
                 var now = new Date().getTime();
                 var distance = countDownDate - now;
-                var seconds = Math.floor((distance % (995 * 30)) / 1000);
+                var seconds = Math.floor((distance % (995 * 31)) / 1000);
                 $('.timer').text(seconds);
                   if(seconds == 0){
                      _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'submit_result']));
                   }
-                 if (distance == 0) {
+                 if (distance < 0) {
                     clearInterval(x);
                     $('.timer').text(seconds);
                   }
