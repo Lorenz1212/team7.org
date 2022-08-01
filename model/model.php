@@ -30,6 +30,7 @@ Class Model {
 		  $val1 = $this->crud->escape_string($val1);
 		  $admin_id=$this->User_Data('admin_UID');
 		  switch($type){
+		  	//result ng mga player na tumaya
 		  	case "result_player":{
 		  		 $data_player = array();
 		  		$sql = "SELECT *,(SELECT CONCAT(fname,' ',lname) FROM tbl_administrator WHERE id=tbl_user_bet.user_id) as fullname FROM tbl_user_bet ORDER BY id DESC";
@@ -45,6 +46,7 @@ Class Model {
 		  		return $data_player;
 		  		break;
 		  	}
+		  	//result ng mga win and lose
 		  	case "result_list":{	
 		  	  $data = array();
 		  	  $data_wallet = array();
@@ -66,6 +68,8 @@ Class Model {
 		  		return array_merge_recursive($data,$data_wallet);
 		  		break;
 		  	}
+
+		  	//Para isubmit ni player kung ano bet nila.
 		  	case "submit_bet":{
 		  		$sql = "SELECT * FROM tbl_administrator WHERE id='$admin_id'";
 		  		$row = $this->crud->fetchSingleRow($sql);
@@ -93,6 +97,7 @@ Class Model {
 		  		}
 		  		break;
 		  	}
+		  	//Para isubmit kung ano result ng bet nila once na tapos ang timer.
 		  	case "submit_result":{
 		  		$sql = "SELECT *,(SELECT wallet FROM tbl_administrator WHERE id=tbl_user_bet.user_id) as wallet FROM tbl_user_bet";
 		  		$query = $this->crud->getData($sql);
