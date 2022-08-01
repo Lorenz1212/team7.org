@@ -195,7 +195,7 @@ var APPHANDLER = function(){
                 _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'result_player']));
                 // Para magrefresh yung table every 4 second to update the data.
                 setInterval(function() {
-                  _ajaxrequest("../controllers/controller.php", "POST", _constructBlockUi('blockPage', false, 'Loading...'), _constructForm(['dashboard', 'result_player']));
+                  _ajaxrequest("../controllers/controller.php", "POST", false, _constructForm(['dashboard', 'result_player']));
                 }, 4000);
                 // Para submit mo yung bet mo.
                 $('.val-status').on('click',function(e){
